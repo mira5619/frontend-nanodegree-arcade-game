@@ -1,4 +1,5 @@
 function randomNumber(range) {
+    "use strict";
     var number = Math.floor((Math.random() * range));
     return number;
 }
