@@ -14,7 +14,7 @@ var Enemy = function(y, speed) {
     this.x = -100;
     this.y = y;
     this.speed = speed;
-}
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -26,13 +26,13 @@ Enemy.prototype.update = function(dt) {
     //if bug goes off of canvas
     if (this.x > 500) {
       this.x = -100;
-    };
-}
+    }
+};
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -44,12 +44,12 @@ var Player = function() {
     this.x = 202;
     this.y = 410;
     this.score = 0;
-}
+};
 
 Player.prototype.reset = function() {
     this.x = 202;
     this.y = 410;
-}
+};
 
 Player.prototype.update = function(dt) {
    //reset player's position when he reach the water
@@ -61,7 +61,7 @@ Player.prototype.update = function(dt) {
     if(player.score < 0) {
         player.score= 0;
     }
-}
+};
 
 //collision
 function checkCollisions () {
@@ -85,7 +85,7 @@ Player.prototype.render = function() {
     ctx.font = "30px serif";
     ctx.fillStyle = "red";
     ctx.fillText("SCORE:" + " " + player.score, 175 , 75);
-}
+};
 
 Player.prototype.handleInput = function(keyPressed) {
    if (keyPressed === 'up' && this.y > 0) {
@@ -100,7 +100,7 @@ Player.prototype.handleInput = function(keyPressed) {
     else if (keyPressed === 'right' && this.x < 400) {
         this.x += 45;
     }
-}
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
