@@ -65,8 +65,8 @@ Player.prototype.reset = function() {
 
 Player.prototype.update = function() {
     //reset player score to 0, if it is negative
-    if(player.score < 0) {
-        player.score= 0;
+    if(this.score < 0) {
+        this.score= 0;
     }
 };
 
