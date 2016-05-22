@@ -64,11 +64,6 @@ Player.prototype.reset = function() {
 };
 
 Player.prototype.update = function() {
-   //reset player's position when he reach the water
-    if (player.y <= 0){
-        player.score += 10;
-        player.reset();
-    }
     //reset player score to 0, if it is negative
     if(player.score < 0) {
         player.score= 0;
@@ -87,6 +82,12 @@ Player.prototype.handleInput = function(keyPressed) {
     }
     else if (keyPressed === 'right' && this.x < 400) {
         this.x += 45;
+    }
+
+    //reset player's position when he reach the water
+    if (this.y <= 0){
+        this.score += 10;
+        this.reset();
     }
 };
 
