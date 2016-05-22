@@ -4,18 +4,30 @@ function randomNumber(range) {
     return number;
 }
 
+var Bug = function(sprite, x, y) {
+    this.sprite = sprite;
+    this.x = x;
+    this.y = y;
+};
+
+Bug.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
 // Enemies our player must avoid
-var Enemy = function(y, speed) {
+var Enemy = function(sprite, x, y) {
+    Bug.call(this, sprite, x, y);
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-    this.x = -100;
-    this.y = y;
-    this.speed = speed;
+    //this.sprite = 'images/enemy-bug.png'
+    this.speed = randomNumber(80);
 };
+
+Enemy.prototype = Object.create(Bug.prototype);
+Enemy.prototype.constructor = Enemy;
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -31,28 +43,27 @@ Enemy.prototype.update = function(dt) {
 };
 
 // Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
+/*Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+};*/
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function() {
-    // The image/sprite for our player
-    this.sprite = 'images/char-boy.png';
-    //initial position for the player
-    this.x = 202;
-    this.y = 410;
+
+var Player = function(sprite, x, y) {
+    Bug.call(this, sprite, x, y);
     this.score = 0;
 };
+Player.prototype = Object.create(Bug.prototype);
+Player.prototype.constructor = Player;
 
 Player.prototype.reset = function() {
     this.x = 202;
     this.y = 410;
 };
 
-Player.prototype.update = function(dt) {
+Player.prototype.update = function() {
    //reset player's position when he reach the water
     if (player.y <= 0){
         player.score += 10;
@@ -62,30 +73,6 @@ Player.prototype.update = function(dt) {
     if(player.score < 0) {
         player.score= 0;
     }
-};
-
-//collision
-function checkCollisions () {
-    allEnemies.forEach(function(enemy) {
-        if(enemy.x < player.x + 50 &&
-            enemy.x + 70 > player.x &&
-            enemy.y < player.y + 50 &&
-            enemy.y + 70 > player.y) {
-                player.score--;
-                player.reset();
-            }
-    });
-}
-
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    //adding text on the canvas
-    ctx.rect(0, 50, 505, 30);
-    ctx.fillStyle = "rgba(0,0,0,0.75)";
-    ctx.fill();
-    ctx.font = "30px serif";
-    ctx.fillStyle = "red";
-    ctx.fillText("SCORE:" + " " + player.score, 175 , 75);
 };
 
 Player.prototype.handleInput = function(keyPressed) {
@@ -103,17 +90,32 @@ Player.prototype.handleInput = function(keyPressed) {
     }
 };
 
+//collision
+function checkCollisions () {
+    allEnemies.forEach(function(enemy) {
+        if(enemy.x < player.x + 50 &&
+            enemy.x + 70 > player.x &&
+            enemy.y < player.y + 50 &&
+            enemy.y + 70 > player.y) {
+                player.score--;
+                player.reset();
+            }
+    });
+}
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
+
 var allEnemies = [];
 var enemyPath = [60, 130, 190, 230];
 for (var i = 0; i < 4; i++) {
-var enemy = new Enemy(enemyPath[i],randomNumber(80));
+var enemy = new Enemy('images/enemy-bug.png', -100, enemyPath[i]);
 allEnemies.push(enemy);
 }
 
 // Place the player object in a variable called player
-var player = new Player();
+
+var player = new Player('images/char-boy.png', 202, 410);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -124,5 +126,6 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
+
     player.handleInput(allowedKeys[e.keyCode]);
 });
